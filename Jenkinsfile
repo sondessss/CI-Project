@@ -32,9 +32,7 @@ pipeline {
         stage("SonarQube Analysis") {
           agent any  
            steps {
-                  sh ''mvn clean verify sonar:sonar -Dsonar.projectKey=AchatProject -Dsonar.host.url=http://
-
-http://172.20.10.7:9000 -Dsonar.login=admin1'
+                  sh ''mvn clean verify sonar:sonar -Dsonar.projectKey=AchatProject -Dsonar.host.url=http://http://172.20.10.7:9000 -Dsonar.login=admin1'
                   echo 'sonar static analysis done'
            }
          }
