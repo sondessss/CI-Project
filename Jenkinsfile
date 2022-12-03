@@ -4,7 +4,7 @@ pipeline {
         stage("Cloning Project"){
             steps {
                 git branch: 'master',
-                url: 'https://github.com/sawsanSe/Devops.git'
+                url: 'https://github.com/sondessss/CI-Project.git'
                 echo 'checkout stage'
             }
         }
@@ -34,7 +34,7 @@ pipeline {
            steps {
                   sh ''mvn clean verify sonar:sonar -Dsonar.projectKey=AchatProject -Dsonar.host.url=http://
 
-http://192.168.10.114:9000 -Dsonar.login=sqp_283fc84b786807e485a3cc54e3d9dcb19f00a1cd'
+http://172.20.10.7:9000 -Dsonar.login=admin1'
                   echo 'sonar static analysis done'
            }
          }
@@ -46,13 +46,7 @@ http://192.168.10.114:9000 -Dsonar.login=sqp_283fc84b786807e485a3cc54e3d9dcb19f0
                 }
             }
         }
-        stage("Nexus Deploy") {
-            steps {
-                script {
-                    sh "mvn clean package deploy:deploy -DgroupId=com.esprit.examen -DartifactId=tpAchatProject -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar -DrepositoryId=deploymentRepo -Durl=http://http://192.168.10.114:8081/repository/maven-releases/ -Dfile=target/tpAchatProject-1.0.jar"
-                }
-            }
-        }
+
     }
 }
     
