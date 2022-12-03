@@ -1,51 +1,63 @@
 pipeline {
     agent any
-    stages {
-        stage("Cloning Project"){
-            steps {
-                git branch: 'master',
-                url: 'https://github.com/sondessss/CI-Project.git'
-                echo 'checkout stage'
-            }
-        }
-       
-        stage ('MVN clean') {
-      steps {
-        sh 'mvn clean -e'
-        echo 'Build stage done'
-      }
+    tools {
+        maven "MAVEN"
     }
-   
-        stage("compile Project"){
+    environment {
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = "172.20.10.7:8081"
+        NEXUS_REPOSITORY = "simpleAppRelease"
+    }
+    stages {
+        stage("Clone code from GitHub") {
             steps {
-                 sh 'mvn compile -X -e'
-                  echo 'compile stage done'
+                script {
+                    git branch: 'master', url: 'https://github.com/sondessss/CI-Project';
+                }
             }
         }
-        stage("unit tests"){
-            steps {
-                 sh 'mvn test'
-                  echo 'unit tests stage done'
-            }
-        }
-       
-        stage("SonarQube Analysis") {
-          agent any  
-           steps {
-                  sh ''mvn clean verify sonar:sonar -Dsonar.projectKey=AchatProject -Dsonar.host.url=http://
-                      http://172.20.10.7:9000 -Dsonar.login=admin1'
-                  echo 'sonar static analysis done'
-           }
-         }
-         
-          stage("mvn Pckage") {
+        stage("Maven Build") {
             steps {
                 script {
                     sh "mvn package -DskipTests=true"
                 }
             }
         }
-
+        stage("Publish to Nexus Repository Manager") {
+            steps {
+                script {
+                    pom = readMavenPom file: "pom.xml";
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
+                        nexusArtifactUploader(
+                            nexusVersion: NEXUS_VERSION,
+                            protocol: NEXUS_PROTOCOL,
+                            nexusUrl: NEXUS_URL,
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: NEXUS_REPOSITORY,
+                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            artifacts: [
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: artifactPath,
+                                type: pom.packaging],
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+                    } else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
+                }
+            }
+        }
     }
 }
-    
