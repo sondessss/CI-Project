@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Cloning Project"){
             steps {
-                git branch: 'branchedev',
+                git branch: 'master',
                 url: 'https://github.com/sawsanSe/Devops.git'
                 echo 'checkout stage'
             }
