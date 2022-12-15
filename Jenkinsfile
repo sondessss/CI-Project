@@ -1,4 +1,9 @@
 pipeline {
+    environment{
+    registry="espritadmin/my1st-deploy"
+    registryCredential="dockerHub"
+        DockerImage="mybackImage"
+    }
     agent any
     stages {
         stage("Cloning Project"){
@@ -36,20 +41,13 @@ pipeline {
                   }
            }
          }
-          stage("Nexus Deploy") {
-            steps {
-                script {
-                    sh "nexusArtifactUploader artifacts: [[artifactId: 'tpAchatProject', classifier: '', file: 'target/tpAchatProject-1.0.jar', type: 'jar']],
-                     credentialsId: '',
-                     groupId: 'com.esprit.examen',
-                     nexusUrl: '172.20.10.7/8081',
-                     nexusVersion: 'nexus2',
-                     protocol: 'http',
-                     repository: 'http://172.20.10.7:8081/repository/java-Re',
-                     version: '1.0'"
-                }
+        stage('build') {
+            steps{
+               script {
+               dockerImage=docker.build registry + ":$BUILD_NUMBER"
+               }
+             }
             }
 
-          }
     }
 }
