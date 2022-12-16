@@ -20,6 +20,13 @@ pipeline {
         echo 'Build stage done'
       }
     }
+         stage("mvn Pckage") {
+            steps {
+                script {
+                    sh "mvn package -DskipTests=true"
+                }
+            }
+        }
    
         stage('build') {
             steps{
