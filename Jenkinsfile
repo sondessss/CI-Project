@@ -1,8 +1,8 @@
 pipeline {
     environment{
-    registry="espritadmin/my1st-deploy"
+    registry="espritadmin/my1st-deploy/my1st-image"
     registryCredential="dockerHub"
-        DockerImage="my1st-deploy"
+        DockerImage="my1st-image"
     }
     agent any
     stages {
