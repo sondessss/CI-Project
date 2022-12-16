@@ -2,7 +2,7 @@ pipeline {
     environment{
     registry="espritadmin/my1st-deploy"
     registryCredential="dockerHub"
-        DockerImage="mybackImage"
+        DockerImage="my1st-deploy"
     }
     agent any
     stages {
@@ -35,13 +35,14 @@ pipeline {
                }
              }
             }
-         stage('push to dockerhub') {
-             steps{
-               script {
-                 
-                   dockerImage.push()
-                      }
-                  }
-                }
+       stage('push to dockerhub') {
+         steps{
+            script {
+             docker.withRegistry( '', registryCredential ) {
+             dockerImage.push()
+                   }
+                 }
+               }
+             }
 }
 }
