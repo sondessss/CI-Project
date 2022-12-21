@@ -57,14 +57,13 @@ pipeline {
                }
              }
             }
-       stage('push to dockerhub') {
-         steps{
-            script {
-             docker.withRegistry( '', registryCredential ) {
-             dockerImage.push()
-                   }
-                 }
-               }
+         stage("docker push") {
+              steps{
+                 script {
+                 docker.withRegistry( '', registryCredential ) {
+                 dockerImage.push()
+              }
              }
+           }
 }
 }
