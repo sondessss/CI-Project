@@ -35,7 +35,9 @@ pipeline {
                     artifactId: 'tpAchatProject',  
                       classifier: '',  
                       file: 'target/tpAchatProject-1.0.jar',   
-                      type: 'jar'],  
+                      type: 'jar'
+                     ]
+                 ],
                    
             credentialsId: 'nexus1', 
             groupId: 'com.esprit.examen', 
