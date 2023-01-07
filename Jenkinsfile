@@ -20,37 +20,6 @@ pipeline {
         echo 'Build stage done'
       }
     }
-         stage("mvn Pckage") {
-            steps {
-                script {
-                    sh "mvn package -DskipTests=true"
-                }
-            }
-        }
-        
-          stage("Upload Jar  To Nexus") {
-            steps {  
-               nexusArtifactUploader artifacts: [ 
-                 [ 
-                    artifactId: 'tpAchatProject',  
-                      classifier: '',  
-                      file: 'target/tpAchatProject-1.0.jar',   
-                      type: 'jar'
-                     ]
-                 ],
-                   
-            credentialsId: 'nexus1', 
-            groupId: 'com.esprit.examen', 
-            nexusUrl: '172.20.10.7:8081', 
-            nexusVersion: 'nexus3', 
-            protocol: 'http', 
-            repository: 'maven-releases',  
-            version: '1.0' 
-
-
-        }  
-
-     }
    
         stage('build') {
             steps{
