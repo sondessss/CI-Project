@@ -68,6 +68,7 @@ pipeline {
               }
              }
            }
+         }
              
           stage("DockerHub login ") {
               steps{
@@ -83,6 +84,6 @@ pipeline {
               
              }  
         }
-}
+
 }
 }
