@@ -39,9 +39,9 @@ pipeline {
                      ]
                  ],
                    
-            credentialsId: 'nexus1', 
+            credentialsId: 'nexus', 
             groupId: 'com.esprit.examen', 
-            nexusUrl: '172.20.10.7:8081', 
+            nexusUrl: '172.20.10.8:8081', 
             nexusVersion: 'nexus3', 
             protocol: 'http', 
             repository: 'maven-releases',  
