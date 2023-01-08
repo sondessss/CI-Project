@@ -28,6 +28,14 @@ pipeline {
             }
         }
         
+                stage("SonarQube Analysis") {
+          agent any  
+           steps {
+                  sh 'mvn sonar:sonar -Dsonar.projectKey=myProject -Dsonar.host.url=http://172.20.10.8:9000 -Dsonar.login=1ad4adbb6881d1aa0d3ba17430e83c619c5f44eb'
+                  echo 'sonar static analysis done'
+           }
+         }
+        
           stage("Upload Jar  To Nexus") {
             steps {  
                nexusArtifactUploader artifacts: [ 
