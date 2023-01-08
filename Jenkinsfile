@@ -68,6 +68,12 @@ pipeline {
               }
              }
            }
+             
+          stage("DockerHub login ") {
+              steps{
+                  sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u espritadmin -p initiationcloud'
+            }
+          }
 
           stage('Docker-compose file') {
 
